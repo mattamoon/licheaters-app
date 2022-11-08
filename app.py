@@ -13,7 +13,7 @@ def check_user_details():
 
     # Set user details
     lichess_obj.user = 'basilcandle'  # set user to check games for
-    lichess_obj.max_games = 10  # set max amount of games to review
+    lichess_obj.max_games = 25  # set max amount of games to review
     lichess_obj.start = '2022/1/1'  # from YYYY/m/d format
     lichess_obj.end = '2022/12/31'  # to YYYY/m/d format
 

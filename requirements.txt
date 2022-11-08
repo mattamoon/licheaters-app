@@ -5,7 +5,7 @@ charset-normalizer==2.1.1
 colorama==0.4.6
 Deprecated==1.2.13
 exceptiongroup==1.0.1
-gathercheater @ git+https://github.com/mattamoon/licheaters.git@16e6b0d689cc6b147ffb1b9979d9c58dc4b49274
+gathercheater @ git+https://github.com/mattamoon/licheaters.git
 idna==3.4
 importlib-metadata==5.0.0
 iniconfig==1.1.1
