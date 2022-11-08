@@ -1,1 +1,1 @@
-# licheater-app
+# licheaters-app
