@@ -1,6 +1,6 @@
 # licheaters-app
 
-Check if you played against anyone now marked as violating ToS or if they closed their account. 
+Check if you played against anyone on Lichess now marked as violating ToS or if they closed their account. 
 
 # Install
 1. Clone the repo
