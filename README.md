@@ -3,14 +3,14 @@
 Check if you played against anyone on Lichess now marked as violating ToS or if they closed their account. 
 
 # Install
-1. Clone the repo
+1. Fork the repo
 2. Install requirements.txt  
 
 
 ## Check for cheaters!:
 1. Open app.py
 2. Update with your user details, # of games and dates
-3. Add your api key to the .env file to speed up searches
+3. Add your api key to the .env file to speed up searches (optional but recommended)
 
 ```
     Setup your Lichess user details in app.py:
