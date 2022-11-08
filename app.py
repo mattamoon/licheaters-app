@@ -5,6 +5,7 @@ from gathercheater.constants import *
 
 def check_user_details():
     # checks for API Key in the .env file -- greatly speeds up the searches!
+    # add .env to your gitignore
     configure()
 
     # using the gathercheater package to create GatherCheater object
