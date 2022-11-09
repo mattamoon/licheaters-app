@@ -3,7 +3,7 @@
 Check if you played against anyone on Lichess now marked as violating ToS or if they closed their account. 
 
 # Install
-1. Fork the repo
+1. Fork the repo or download the zip with files!
 2. Install requirements.txt  
 
 
