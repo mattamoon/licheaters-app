@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+      <h1>Violated ToS</h1>
+      <ul>
+        {% for acc in tos %}
+        <li>{{ acc }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div>
+      <h1>Closed Accounts</h1>
+      <ul>
+        {% for close in closed %}
+        <li>{{ close }}</li>
+        {% endfor %}
+      </ul>
+  </div>
+
+      <div>
+      <h1>Good Accounts</h1>
+      <ul>
+        {% for goodies in good %}
+        <li>{{ goodies }}</li>
+        {% endfor %}
+      </ul>
+  </div>
+{% endblock %}
