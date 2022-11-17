@@ -20,14 +20,14 @@ def check_user_details():
 
     # Set user details
     lichess_obj.user = 'basilcandle'  # set user to check games for
-    lichess_obj.max_games = 100  # set max amount of games to review
+    lichess_obj.max_games = 750  # set max amount of games to review
     lichess_obj.start = '2022/1/1'  # from YYYY/m/d format
     lichess_obj.end = '2022/12/31'  # to YYYY/m/d format
 
     return lichess_obj
 
 
-def check_cheat():
+def licheater_data():
     licheater = check_user_details()
     games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
     players_from_games = licheater.get_players_from_games(games)
@@ -48,21 +48,22 @@ def check_cheat():
             licheater.data_list.extend(data)
             licheater.df_index += 1
 
-            cheat, closed, good = licheater.check_cheaters(licheater.data_list)
-
-        return cheat, closed, good
+    return licheater.data_list
 
 
+licheater_data = licheater_data()
 # script to get accounts
-test_accounts = ['mat', 'mike', 'roger']
-closed_accounts = ['sandra', 'bullock']
-goods = ['I\'m, the greatest', 'yesterday']
+test_accounts, closed_accounts, goods = GatherCheater.check_cheaters(licheater_data)
 
+
+# test_accounts = ['mat', 'mike', 'roger']
+# closed_accounts = ['sandra', 'bullock']
+# goods = ['I\'m, the greatest', 'yesterday']
 
 @app.route('/')
 def home():
     return render_template('index.html', tos=test_accounts, closed=closed_accounts, good=goods)
 
 
-if __name__ == '__main__':
+if "__name__" == "__main__":
     app.run(debug=True)
