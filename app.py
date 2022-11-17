@@ -3,7 +3,6 @@ from gathercheater.gathercheater import GatherCheater
 from gathercheater.functions import *
 from gathercheater.constants import *
 from flask import Flask, jsonify, url_for, render_template
-from dotenv import load_dotenv
 
 # Flask Config
 app = Flask(__name__)
@@ -11,7 +10,6 @@ app = Flask(__name__)
 
 def check_user_details():
     # checks for API Key in the .env file -- greatly speeds up the searches!
-    # add .env to your gitignore
     configure()
 
     # using the gathercheater package to create GatherCheater object
@@ -19,7 +17,7 @@ def check_user_details():
 
     # Set user details
     lichess_obj.user = 'basilcandle'  # set user to check games for
-    lichess_obj.max_games = 250  # set max amount of games to review
+    lichess_obj.max_games = 50  # set max amount of games to review
     lichess_obj.start = '2022/1/1'  # from YYYY/m/d format
     lichess_obj.end = '2022/12/31'  # to YYYY/m/d format
 
@@ -54,7 +52,7 @@ def licheater_data():
 licheater_data = licheater_data()
 tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater_data)
 
-
+# Flask routing to display accounts using Jinja templates
 @app.route('/')
 def home():
     return render_template('index.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
