@@ -4,7 +4,6 @@ from gathercheater.functions import *
 from gathercheater.constants import *
 from flask import Flask, jsonify, url_for, render_template
 from dotenv import load_dotenv
-import requests
 
 # Flask Config
 app = Flask(__name__)
@@ -20,7 +19,7 @@ def check_user_details():
 
     # Set user details
     lichess_obj.user = 'basilcandle'  # set user to check games for
-    lichess_obj.max_games = 750  # set max amount of games to review
+    lichess_obj.max_games = 250  # set max amount of games to review
     lichess_obj.start = '2022/1/1'  # from YYYY/m/d format
     lichess_obj.end = '2022/12/31'  # to YYYY/m/d format
 
@@ -51,18 +50,14 @@ def licheater_data():
     return licheater.data_list
 
 
-licheater_data = licheater_data()
 # script to get accounts
-test_accounts, closed_accounts, goods = GatherCheater.check_cheaters(licheater_data)
+licheater_data = licheater_data()
+tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater_data)
 
-
-# test_accounts = ['mat', 'mike', 'roger']
-# closed_accounts = ['sandra', 'bullock']
-# goods = ['I\'m, the greatest', 'yesterday']
 
 @app.route('/')
 def home():
-    return render_template('index.html', tos=test_accounts, closed=closed_accounts, good=goods)
+    return render_template('index.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
 
 if "__name__" == "__main__":

@@ -1,42 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Licheaters</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-     <link rel="stylesheet" href="static/style.css">
-  </head>
-  <body>
-    <div class="container-fluid text-center">
-    <!-- NavBar -->
-        <nav class="navbar navbar-expand-lg bg-light">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="/">Licheaters</a>
-          </div>
-        </nav>
-    <!--Content -->
-   <div class="row">
-    <div class="col">
-      <h2>Violated ToS</h2>
-        {% block tos %}
-        {% endblock %}
-    </div>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Licheaters</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+        <link rel="stylesheet" href="static/style.css" />
+    </head>
+    <body>
+        <div class="container-fluid text-center">
+            <!-- NavBar -->
+            <nav class="navbar navbar-expand-lg bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">Licheaters</a>
+                </div>
+            </nav>
+            <!--Content -->
+            <div class="row">
+                <div class="col">
+                    <h2>Violated ToS</h2>
+                    {% block tos %} {% endblock %}
+                </div>
 
-    <div class="col">
-      <h2>Closed Acccount</h2>
-        {% block closed %}
-        {% endblock %}
-    </div>
+                <div class="col">
+                    <h2>Closed Acccount</h2>
+                    {% block closed %} {% endblock %}
+                </div>
 
-    <div class="col">
-      <h2>Good Status</h2>
-        {% block good %}
-        {% endblock %}
-    </div>
-  </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-  </body>
+                <div class="col">
+                    <h2>Good Status</h2>
+                    {% block good %} {% endblock %}
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+    </body>
 </html>
