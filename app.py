@@ -52,11 +52,12 @@ def licheater_data():
 licheater_data = licheater_data()
 tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater_data)
 
+
 # Flask routing to display accounts using Jinja templates
 @app.route('/')
 def home():
     return render_template('index.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
     app.run(debug=True)
