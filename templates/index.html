@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block tos %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for acc in tos %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ acc }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock tos %}
+{% block closed %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for acc in closed %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ acc }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock closed %}
+{% block good %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for acc in good %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ acc }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock good %}

@@ -1,11 +1,15 @@
+import os
 from gathercheater.gathercheater import GatherCheater
 from gathercheater.functions import *
 from gathercheater.constants import *
+from flask import Flask, jsonify, url_for, render_template
+
+# Flask Config
+app = Flask(__name__)
 
 
 def check_user_details():
     # checks for API Key in the .env file -- greatly speeds up the searches!
-    # add .env to your gitignore
     configure()
 
     # using the gathercheater package to create GatherCheater object
@@ -13,14 +17,15 @@ def check_user_details():
 
     # Set user details
     lichess_obj.user = 'basilcandle'  # set user to check games for
-    lichess_obj.max_games = 10  # set max amount of games to review
+    lichess_obj.max_games = 50  # set max amount of games to review
     lichess_obj.start = '2022/1/1'  # from YYYY/m/d format
     lichess_obj.end = '2022/12/31'  # to YYYY/m/d format
 
     return lichess_obj
 
 
-def app(licheater):
+def licheater_data():
+    licheater = check_user_details()
     games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
     players_from_games = licheater.get_players_from_games(games)
     player_list = list_util(players_from_games, licheater.user)
@@ -40,9 +45,19 @@ def app(licheater):
             licheater.data_list.extend(data)
             licheater.df_index += 1
 
-    lichess.display_data(lichess.data_list)
+    return licheater.data_list
+
+
+# script to get accounts
+licheater_data = licheater_data()
+tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater_data)
+
+
+# Flask routing to display accounts using Jinja templates
+@app.route('/')
+def home():
+    return render_template('index.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
 
 if __name__ == "__main__":
-    lichess = check_user_details()
-    app(lichess)
+    app.run(debug=True)
