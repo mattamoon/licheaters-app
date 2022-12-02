@@ -63,6 +63,8 @@ def licheater_data():
 
 
 # script to get accounts
+
+
 # licheater_data = licheater_data()
 # tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater_data)
 
@@ -85,9 +87,7 @@ def authorize():
         session['user'] = profile['id']
         return redirect(url_for('home'))
     else:
-        if 'user' in session:
-            return redirect('/')
-        return redirect(url_for('login'))
+        return f'404'
 
 
 # Flask routing to display accounts using Jinja templates
@@ -102,13 +102,8 @@ def home():
 @app.route('/logout')
 def logout():
     session.pop('user', None)
-    flash('You have been logged out!', 'info')
+    # flash('You have been logged out!', 'info')
     return redirect(url_for('home'))
-
-
-@app.route('/analysis')
-def analyze():
-    return render_template('analysis.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
 
 if __name__ == "__main__":
