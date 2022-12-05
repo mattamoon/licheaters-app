@@ -1,11 +1,12 @@
-import os
+from flask import Flask, url_for, render_template, redirect, session, request, flash
 from gathercheater.gathercheater import GatherCheater
 from gathercheater.functions import *
 from gathercheater.constants import *
-from flask import Flask, jsonify, url_for, render_template, redirect, session, request, flash
 from authlib.integrations.flask_client import OAuth
 from requests.exceptions import HTTPError
+import os
 import requests
+import datetime as dt
 
 # Environment Variables
 load_dotenv()
@@ -16,6 +17,7 @@ LICHESS_HOST = os.getenv("LICHESS_HOST", "https://lichess.org")
 # Flask Config
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+print(os.getenv('SECRET_KEY'))
 app.config['LICHESS_CLIENT_ID'] = os.getenv("LICHESS_CLIENT_ID")
 app.config['LICHESS_AUTHORIZE_URL'] = f"{LICHESS_HOST}/oauth"
 app.config['LICHESS_ACCESS_TOKEN_URL'] = f"{LICHESS_HOST}/api/token"
@@ -25,48 +27,13 @@ oauth = OAuth(app)
 oauth.register('lichess', client_kwargs={"code_challenge_method": "S256"})
 
 
-# Licheater App Functions
-def check_user_details():
-    # using the gathercheater package to create GatherCheater object
-    lichess_obj = GatherCheater()
-
-    # Set user details
-    lichess_obj.user = 'basilcandle'  # set user to check games for
-    lichess_obj.max_games = 10  # set max amount of games to review
-    lichess_obj.start = '2022/1/1'  # from YYYY/m/d format
-    lichess_obj.end = '2022/12/31'  # to YYYY/m/d format
-
-    return lichess_obj
-
-
-def licheater_data():
-    licheater = check_user_details()
-    games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
-    players_from_games = licheater.get_players_from_games(games)
-    player_list = list_util(players_from_games, licheater.user)
-    player_dfs = players_to_df(player_list)
-    total_iterations = len(player_dfs)
-    while licheater.df_index <= total_iterations:
-        try:
-            player_dfs[licheater.df_index]
-        except(IndexError,):
-            print('Data Analysis Complete! \n')
-            break
-        else:
-            player_list = create_player_list(player_dfs[licheater.df_index])
-            data_string = create_player_string(player_list)
-            data = licheater.games_by_player_list(data_string)
-            licheater.data_list.extend(data)
-            licheater.df_index += 1
-
-    return licheater.data_list
-
-
-# script to get accounts
-
-
-# licheater_data = licheater_data()
-# tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater_data)
+# Licheater helper function
+def date_fmt(dt_obj):
+    str_date_fmt = '%Y-%m-%d'
+    dt_date_fmt = '%Y/%m/%d'
+    dto = dt.datetime.strptime(dt_obj, str_date_fmt)
+    dt_str = dto.strftime(dt_date_fmt)
+    return dt_str
 
 
 @app.route('/login')
@@ -81,28 +48,99 @@ def authorize():
     bearer = token['access_token']
     headers = {'Authorization': f'Bearer {bearer}'}
     response = requests.get(f"{LICHESS_HOST}/api/account", headers=headers, timeout=10)
-    response.raise_for_status()
     if response.status_code == 200:
         profile = response.json()
         session['user'] = profile['id']
+        session['token'] = bearer
         return redirect(url_for('home'))
     else:
         return f'404'
 
 
-# Flask routing to display accounts using Jinja templates
 @app.route('/', methods=['POST', 'GET'])
 def home():
     if 'user' in session:
-        return render_template('authenticated.html', user=session['user'])
+        if request.method == 'POST':
+            # Get form values
+            session['dfrom'] = request.form['df']  # date from
+            session['dto'] = request.form['dt']  # date to
+            session['mg'] = request.form['mg']  # max games
+            return redirect(url_for('analyze'))
+        else:
+            return render_template('authenticated.html', user=session['user'])
     else:
-        return render_template('index.html')
+        if request.method == 'POST':
+            session['form_user'] = request.form['liuser']
+            session['dfrom'] = request.form['df']  # date from
+            session['dto'] = request.form['dt']  # date to
+            session['mg'] = request.form['mg']  # max games
+            return redirect(url_for('analyze'))
+        else:
+            return render_template('index.html')
+
+
+@app.route('/analyze', methods=['POST', 'GET'])
+def analyze():
+    # Create GatherCheater Object
+    licheater = GatherCheater()
+    if 'user' in session:
+        licheater.user = session['user']
+    else:
+        licheater.user = session['form_user']
+    # Set Variables
+    new_start = date_fmt(session['dfrom'])
+    new_end = date_fmt(session['dto'])
+    if new_start > new_end:
+        flash('Date Range not valid!')
+        redirect(url_for('home'))
+    else:
+        licheater.start = new_start
+        licheater.end = new_end
+    if int(session['mg']) > 0:
+        licheater.max_games = int(session['mg'])
+    else:
+        flash('Max Games must be > 0', 'info')
+        return redirect(url_for('home'))
+    # Create Client Session
+    if 'token' in session:
+        b_session = berserk.TokenSession(session['token'])
+        licheater.lichess = berserk.Client(b_session)
+    else:
+        licheater.lichess = berserk.Client()
+    # Get Game Data
+    games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
+    try:
+        players_from_games = licheater.get_players_from_games(games)
+    except berserk.exceptions.ResponseError:
+        flash('User not found!', 'info')
+        return redirect(url_for('home'))
+    else:
+        player_list = list_util(players_from_games, licheater.user)
+        player_dfs = players_to_df(player_list)
+        total_iterations = len(player_dfs)
+        while licheater.df_index <= total_iterations:
+            try:
+                player_dfs[licheater.df_index]
+            except(IndexError,):
+                print('Data Analysis Complete! \n')
+                break
+            else:
+                player_list = create_player_list(player_dfs[licheater.df_index])
+                data_string = create_player_string(player_list)
+                data = licheater.games_by_player_list(data_string)
+                licheater.data_list.extend(data)
+                licheater.df_index += 1
+
+            tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater.data_list)
+
+    return render_template('analysis.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
 
 @app.route('/logout')
 def logout():
+    session.pop('token', None)
     session.pop('user', None)
-    # flash('You have been logged out!', 'info')
+    flash('You have been logged out!', 'info')
     return redirect(url_for('home'))
 
 

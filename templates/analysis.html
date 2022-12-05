@@ -1,18 +1,24 @@
-{% extends "base.html" %}
+{% extends "analysis-base.html" %}
 {% block tos %}
 <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">User</th>
+                <th scope="col">
+                    <p class="fs-6 fst-normal">#</p>
+                </th>
+                <th scope="col">
+                    <p class="fs-6 fst-normal">User</p>
+                </th>
             </tr>
         </thead>
         <tbody>
             {% for acc in tos %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
-                <td>{{ acc }}</td>
+                <td>
+                    <p class="fst-5 fw-normal">{{ acc }}</p>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -24,15 +30,21 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">User</th>
+                <th scope="col">
+                    <p class="fs-6 fst-normal">#</p>
+                </th>
+                <th scope="col">
+                    <p class="fs-6 fst-normal">User</p>
+                </th>
             </tr>
         </thead>
         <tbody>
             {% for acc in closed %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
-                <td>{{ acc }}</td>
+                <td>
+                    <p class="fst-6 fw-normal">{{ acc }}</p>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -44,15 +56,21 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">User</th>
+                <th scope="col">
+                    <p class="fs-6 fst-normal">#</p>
+                </th>
+                <th scope="col">
+                    <p class="fs-6 fst-normal">User</p>
+                </th>
             </tr>
         </thead>
         <tbody>
             {% for acc in good %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
-                <td>{{ acc }}</td>
+                <td>
+                    <p class="fst-6 fw-normal">{{ acc }}</p>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
