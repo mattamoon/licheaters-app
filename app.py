@@ -131,7 +131,7 @@ def analyze():
                 licheater.data_list.extend(data)
                 licheater.df_index += 1
 
-            tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater.data_list)
+        tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater.data_list)
 
     return render_template('analysis.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
