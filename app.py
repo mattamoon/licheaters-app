@@ -52,7 +52,6 @@ def authorize():
     bearer = token['access_token']
     headers = {'Authorization': f'Bearer {bearer}'}
     response = requests.get(f"{LICHESS_HOST}/api/account", headers=headers, timeout=10)
-    response.raise_for_status()
     if response.status_code == 200:
         profile = response.json()
         session['user'] = profile['id']
