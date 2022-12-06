@@ -1,5 +1,13 @@
+.table-responsive {
+    max-height:500px;
+}
+
 body {
     background-color: #8C8C8C;
+}
+
+body.analyze {
+     background-color: #D6D6D6;
 }
 
 nav {
@@ -9,7 +17,6 @@ nav {
 div.container {
     background-color: #D6D6D6;
 }
-
 
 .btnAnalyze {
     cursor: pointer;

@@ -18,7 +18,6 @@ LICHESS_HOST = os.getenv("LICHESS_HOST", "https://lichess.org")
 # Flask Config
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-print(os.getenv('SECRET_KEY'))
 app.config['LICHESS_CLIENT_ID'] = os.getenv("LICHESS_CLIENT_ID")
 app.config['LICHESS_AUTHORIZE_URL'] = f"{LICHESS_HOST}/oauth"
 app.config['LICHESS_ACCESS_TOKEN_URL'] = f"{LICHESS_HOST}/api/token"
@@ -131,7 +130,6 @@ def analyze():
             try:
                 player_dfs[licheater.df_index]
             except(IndexError,):
-                print('Data Analysis Complete! \n')
                 break
             else:
                 player_list = create_player_list(player_dfs[licheater.df_index])
