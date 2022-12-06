@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <div class="input-group mb-3">
+          <span class="input-group-text mt-2" id="basic-addon1">@</span>
+          <input type="text" name="liuser" class="form-control mt-2" placeholder="Lichess Username" aria-label="Username" aria-describedby="basic-addon1" required>
+        </div>
+    </div>
+    <div class="col">
+        <p class="fw-bold"> OR &nbsp;&nbsp;
+        <a class="btn btn-primary btn-md mt-2" href="/login" role="button">Login to Lichess</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+              {% for message in messages %}
+                 <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+  </div>
+ </div>
+{% endblock %}
+

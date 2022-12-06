@@ -1,0 +1,14 @@
+{% extends "realbase.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col mt-2">
+  </div>
+  <div class="col align-self-center text-center">
+       Hello, <b class="fw-semibold fst-italic">{{user}}</b>!
+  </div>
+  <div class="col text-end mt-2">
+    <a class="btn btn-dark btn-sm" href="/logout" role="button">Logout</a>
+  </div>
+</div>
+{% endblock %}

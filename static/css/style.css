@@ -1,0 +1,33 @@
+.table-responsive {
+    max-height:500px;
+}
+
+body {
+    background-color: #8C8C8C;
+}
+
+body.analyze {
+     background-color: #D6D6D6;
+}
+
+nav {
+    background-color: #44444C;
+}
+
+div.container {
+    background-color: #D6D6D6;
+}
+
+.btnAnalyze {
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+}
+
+.loader {
+    display: none;
+}
+
+.loading {
+    display: flex;
+}
