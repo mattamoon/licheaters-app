@@ -3,6 +3,7 @@ from gathercheater.gathercheater import GatherCheater
 from gathercheater.functions import *
 from gathercheater.constants import *
 from authlib.integrations.flask_client import OAuth
+from authlib.integrations.base_client.errors import OAuthError
 from requests.exceptions import HTTPError
 import os
 import requests
@@ -44,10 +45,15 @@ def login():
 
 @app.route('/authorize', methods=['GET'])
 def authorize():
-    token = oauth.lichess.authorize_access_token()
+    try:
+        token = oauth.lichess.authorize_access_token()
+    except OAuthError:
+        flash('User login cancelled! Please try again or enter your username above!','info')
+        return redirect(url_for('home'))
     bearer = token['access_token']
     headers = {'Authorization': f'Bearer {bearer}'}
     response = requests.get(f"{LICHESS_HOST}/api/account", headers=headers, timeout=10)
+    response.raise_for_status()
     if response.status_code == 200:
         profile = response.json()
         session['user'] = profile['id']
@@ -83,11 +89,11 @@ def home():
 def analyze():
     # Create GatherCheater Object
     licheater = GatherCheater()
+    # Set Variables
     if 'user' in session:
         licheater.user = session['user']
     else:
         licheater.user = session['form_user']
-    # Set Variables
     new_start = date_fmt(session['dfrom'])
     new_end = date_fmt(session['dto'])
     if new_start > new_end:
@@ -108,11 +114,14 @@ def analyze():
     else:
         licheater.lichess = berserk.Client()
     # Get Game Data
-    games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
     try:
+        games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
         players_from_games = licheater.get_players_from_games(games)
     except berserk.exceptions.ResponseError:
         flash('User not found!', 'info')
+        return redirect(url_for('home'))
+    except OSError:
+        flash('Date Error - Try again!')
         return redirect(url_for('home'))
     else:
         player_list = list_util(players_from_games, licheater.user)
