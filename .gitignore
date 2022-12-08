@@ -2,3 +2,6 @@
 .idea
 /shelf/
 /workspace.xml
+
+api/.env
+venv/
