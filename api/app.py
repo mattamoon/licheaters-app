@@ -13,7 +13,7 @@ import datetime as dt
 # Load environment variables
 load_dotenv()
 
-# Constants
+# Constant
 LICHESS_HOST = os.getenv("LICHESS_HOST", "https://lichess.org")
 
 # Flask Config
