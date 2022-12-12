@@ -5,16 +5,20 @@ from gathercheater.constants import *
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.base_client.errors import OAuthError
 from requests.exceptions import HTTPError
+from waitress import serve
 import os
 import requests
 import datetime as dt
+
+# Load environment variables
+load_dotenv()
 
 # Constants
 LICHESS_HOST = os.getenv("LICHESS_HOST", "https://lichess.org")
 
 # Flask Config
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY")
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 app.config['LICHESS_CLIENT_ID'] = os.environ.get("LICHESS_CLIENT_ID")
 app.config['LICHESS_AUTHORIZE_URL'] = f"{LICHESS_HOST}/oauth"
 app.config['LICHESS_ACCESS_TOKEN_URL'] = f"{LICHESS_HOST}/api/token"
@@ -44,7 +48,7 @@ def authorize():
     try:
         token = oauth.lichess.authorize_access_token()
     except OAuthError:
-        flash('User login cancelled! Please try again or enter your username above!','info')
+        flash('User login cancelled! Please try again or enter your username above!', 'info')
         return redirect(url_for('home'))
     bearer = token['access_token']
     headers = {'Authorization': f'Bearer {bearer}'}
@@ -147,5 +151,5 @@ def logout():
     return redirect(url_for('home'))
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    serve(app, host='0.0.0.0', port=8080, threads=2)
