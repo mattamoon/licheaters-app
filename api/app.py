@@ -5,7 +5,6 @@ from gathercheater.constants import *
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.base_client.errors import OAuthError
 from requests.exceptions import HTTPError
-from waitress import serve
 import os
 import requests
 import datetime as dt
@@ -18,8 +17,8 @@ LICHESS_HOST = os.getenv("LICHESS_HOST", "https://lichess.org")
 
 # Flask Config
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-app.config['LICHESS_CLIENT_ID'] = os.environ.get("LICHESS_CLIENT_ID")
+app.config['SECRET_KEY'] = os.environ('SECRET_KEY')
+app.config['LICHESS_CLIENT_ID'] = os.environ('LICHESS_CLIENT_ID')
 app.config['LICHESS_AUTHORIZE_URL'] = f"{LICHESS_HOST}/oauth"
 app.config['LICHESS_ACCESS_TOKEN_URL'] = f"{LICHESS_HOST}/api/token"
 
@@ -160,4 +159,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    serve(app, host='0.0.0.0', port=8080, threads=2)
+    app.run(debug=False)
