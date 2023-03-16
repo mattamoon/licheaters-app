@@ -37,6 +37,13 @@ def date_fmt(dt_obj):
     return dt_str
 
 
+def session_user():
+    if 'user' in session:
+        return session['user']
+    else:
+        return session['form_user']
+
+
 @app.route('/login')
 def login():
     redirect_uri = url_for("authorize", _external=True)
@@ -88,30 +95,31 @@ def home():
 def analyze():
     # Create GatherCheater Object
     licheater = GatherCheater()
-    # Set Variables
-    if 'user' in session:
-        licheater.user = session['user']
-    else:
-        licheater.user = session['form_user']
-    new_start = date_fmt(session['dfrom'])
-    new_end = date_fmt(session['dto'])
-    if new_start > new_end:
-        flash('Date Range not valid!')
-        redirect(url_for('home'))
-    else:
-        licheater.start = new_start
-        licheater.end = new_end
-    if int(session['mg']) > 0:
-        licheater.max_games = int(session['mg'])
-    else:
-        flash('Max Games must be > 0', 'info')
-        return redirect(url_for('home'))
     # Create Client Session
     if 'token' in session:
         b_session = berserk.TokenSession(session['token'])
         licheater.lichess = berserk.Client(b_session)
     else:
         licheater.lichess = berserk.Client()
+    # Set User
+    licheater.user = session_user()
+    # Get Date Values
+    new_start = date_fmt(session['dfrom'])
+    new_end = date_fmt(session['dto'])
+    # Check Dates for issues
+    if new_start > new_end:
+        flash('Date Range not valid!')
+        redirect(url_for('home'))
+    else:
+        licheater.start = new_start
+        licheater.end = new_end
+    # Get Max Games value
+    if int(session['mg']) > 0:
+        licheater.max_games = int(session['mg'])
+    else:
+        flash('Max Games must be > 0', 'info')
+        return redirect(url_for('home'))
+
     # Get Game Data
     try:
         games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
