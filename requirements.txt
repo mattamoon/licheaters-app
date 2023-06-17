@@ -1,4 +1,4 @@
 Authlib==1.1.0
-Flask==2.2.2
-requests==2.28.1
+Flask==2.2.5
+requests==2.31.0
 gathercheater @ git+https://github.com/mattamoon/licheaters.git
