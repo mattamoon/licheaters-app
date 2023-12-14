@@ -1,5 +1,5 @@
 from flask import Flask, url_for, render_template, redirect, session, request, flash
-from gathercheater.gathercheater import GatherCheater
+from gathercheater.gathercheater import GatherCheater, berserk
 from gathercheater.functions import *
 from gathercheater.constants import *
 from authlib.integrations.flask_client import OAuth
@@ -27,15 +27,6 @@ oauth = OAuth(app)
 oauth.register('lichess', client_kwargs={"code_challenge_method": "S256"})
 
 
-# Licheater helper function
-def date_fmt(dt_obj):
-    str_date_fmt = '%Y-%m-%d'
-    dt_date_fmt = '%Y/%m/%d'
-    dto = dt.datetime.strptime(dt_obj, str_date_fmt)
-    dt_str = dto.strftime(dt_date_fmt)
-    return dt_str
-
-
 @app.route('/login')
 def login():
     redirect_uri = url_for("authorize", _external=True)
@@ -47,7 +38,7 @@ def authorize():
     try:
         token = oauth.lichess.authorize_access_token()
     except OAuthError:
-        flash('User login cancelled! Please try again or enter your username above!','info')
+        flash('User login cancelled! Please try again or enter your username above!', 'info')
         return redirect(url_for('home'))
     bearer = token['access_token']
     headers = {'Authorization': f'Bearer {bearer}'}
@@ -93,8 +84,8 @@ def analyze():
         licheater.user = session['user']
     else:
         licheater.user = session['form_user']
-    new_start = date_fmt(session['dfrom'])
-    new_end = date_fmt(session['dto'])
+    new_start = session['dfrom']
+    new_end = session['dto']
     if new_start > new_end:
         flash('Date Range not valid!')
         redirect(url_for('home'))
@@ -114,7 +105,7 @@ def analyze():
         licheater.lichess = berserk.Client()
     # Get Game Data
     try:
-        games = licheater.games_by_player_dates(game_dates(licheater.start), game_dates(licheater.end))
+        games = licheater.games_by_player_dates()
         players_from_games = licheater.get_players_from_games(games)
     except berserk.exceptions.ResponseError:
         flash('User not found!', 'info')
