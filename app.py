@@ -14,6 +14,7 @@ load_dotenv()
 
 # Constants
 LICHESS_HOST = os.getenv("LICHESS_HOST", "https://lichess.org")
+LICHESS_TOKEN = os.getenv("api_key")
 
 # Flask Config
 app = Flask(__name__)
@@ -25,6 +26,14 @@ app.config['LICHESS_ACCESS_TOKEN_URL'] = f"{LICHESS_HOST}/api/token"
 # Oauth Config
 oauth = OAuth(app)
 oauth.register('lichess', client_kwargs={"code_challenge_method": "S256"})
+
+# API Token / Berserk.Client() config
+if LICHESS_TOKEN:
+    auth_token = berserk.TokenSession(LICHESS_TOKEN)
+    licheater = GatherCheater()
+    licheater.lichess = berserk.Client(auth_token)
+else:
+    licheater = GatherCheater()
 
 
 @app.route('/login')
@@ -77,8 +86,6 @@ def home():
 
 @app.route('/analyze', methods=['POST', 'GET'])
 def analyze():
-    # Create GatherCheater Object
-    licheater = GatherCheater()
     # Set Variables
     if 'user' in session:
         licheater.user = session['user']
@@ -97,12 +104,6 @@ def analyze():
     else:
         flash('Max Games must be > 0', 'info')
         return redirect(url_for('home'))
-    # Create Client Session
-    if 'token' in session:
-        b_session = berserk.TokenSession(session['token'])
-        licheater.lichess = berserk.Client(b_session)
-    else:
-        licheater.lichess = berserk.Client()
     # Get Game Data
     try:
         games = licheater.games_by_player_dates()
