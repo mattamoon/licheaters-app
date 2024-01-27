@@ -23,6 +23,7 @@ print(secrets.token_hex())
 Run this and then copy & paste this value in your .env file where 'SECRET_KEY=" "' (paste value after = sign, in between the quotes)
 
 # Run app.py
+- Navigate to http://127.0.0.1:5000 or http://localhost:5000/
 - Enter your username or login through lichess ( login will greatly speed up the search)
 - Enter an appropriate date range
 - Enter # of games to check

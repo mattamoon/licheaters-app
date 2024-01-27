@@ -27,14 +27,6 @@ app.config['LICHESS_ACCESS_TOKEN_URL'] = f"{LICHESS_HOST}/api/token"
 oauth = OAuth(app)
 oauth.register('lichess', client_kwargs={"code_challenge_method": "S256"})
 
-# API Token / Berserk.Client() config
-if LICHESS_TOKEN:
-    auth_token = berserk.TokenSession(LICHESS_TOKEN)
-    licheater = GatherCheater()
-    licheater.lichess = berserk.Client(auth_token)
-else:
-    licheater = GatherCheater()
-
 
 @app.route('/login')
 def login():
@@ -86,6 +78,13 @@ def home():
 
 @app.route('/analyze', methods=['POST', 'GET'])
 def analyze():
+    # Establish Client with Token if available
+    if LICHESS_TOKEN:
+        auth_token = berserk.TokenSession(LICHESS_TOKEN)
+        licheater = GatherCheater()
+        licheater.lichess = berserk.Client(auth_token)
+    else:
+        licheater = GatherCheater()
     # Set Variables
     if 'user' in session:
         licheater.user = session['user']
