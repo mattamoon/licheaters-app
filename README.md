@@ -33,4 +33,8 @@ Run this and then copy & paste this value in your .env file where 'SECRET_KEY=" 
 - Lichess ToS: ```https://lichess.org/terms-of-service```
 - If someone violated the ToS and then closed their account, they will show as Closed.
 
+# Thanks!
+- lakinwecker for [lichess-oauth-flask example](https://github.com/lakinwecker/lichess-oauth-flask)
+
+
 
