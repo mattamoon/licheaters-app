@@ -1,4 +1,4 @@
-Authlib==1.1.0
+Authlib==1.3.2
 Flask==2.2.5
 requests==2.32.0
 gathercheater @ git+https://github.com/mattamoon/licheaters.git
