@@ -1,0 +1,10 @@
+services:
+  app:
+    image: licheater/licheaters
+    build: .
+    env_file:
+      - ./.env
+    environment:
+      - FLASK_ENV=development
+    ports:
+      - "5000:5000"
