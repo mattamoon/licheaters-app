@@ -9,13 +9,10 @@ Search if you played against anyone on Lichess now marked as violating ToS or if
 - ```docker-compose up -d```
 # Setup
 #### 1. Create a Secret Key for Flask in the .env file.
-```
-import secrets
 
-print(secrets.token_hex())
-```
 #### 2. Optional - Create an api access token on Lichess & Copy the value to the .env file
 - https://lichess.org/account/oauth/token (Read & Write preferences under 'User Account')
+- 
 # RUN app.py or compose with docker
 - Navigate to http://127.0.0.1:5000
 
