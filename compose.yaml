@@ -1,0 +1,8 @@
+services:
+  app:
+    image: licheater/licheaters
+    build: .
+    env_file:
+      - ./.env
+    ports:
+      - 5000:5000

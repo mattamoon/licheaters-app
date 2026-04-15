@@ -1,13 +1,11 @@
 from flask import Flask, url_for, render_template, redirect, session, request, flash
 from gathercheater.gathercheater import GatherCheater, berserk
 from gathercheater.functions import *
-from gathercheater.constants import *
+from berserk.exceptions import ResponseError
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.base_client.errors import OAuthError
-from requests.exceptions import HTTPError
 import os
 import requests
-import datetime as dt
 
 # Environment Variables
 load_dotenv()
@@ -30,8 +28,8 @@ oauth.register('lichess', client_kwargs={"code_challenge_method": "S256"})
 
 @app.route('/login')
 def login():
-    redirect_uri = url_for("authorize", _external=True)
-    return oauth.lichess.authorize_redirect(redirect_uri)
+  redirect_uri = url_for("authorize", _external=True)
+  return oauth.lichess.authorize_redirect(redirect_uri)
 
 
 @app.route('/authorize', methods=['GET'])
@@ -51,7 +49,7 @@ def authorize():
         session['token'] = bearer
         return redirect(url_for('home'))
     else:
-        return f'404'
+        return render_template('error-404.html', user=session['user'])
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -114,8 +112,11 @@ def analyze():
         flash('Date Error - Try again!')
         return redirect(url_for('home'))
     else:
-        player_list = list_util(players_from_games, licheater.user)
-        player_dfs = players_to_df(player_list)
+        remove_search_user_list = [d for d in players_from_games if d.get('user') != licheater.user]
+        user_list = []
+        for user in remove_search_user_list:
+            user_list.append(user['user'])
+        player_dfs = players_to_df(user_list)
         total_iterations = len(player_dfs)
         while licheater.df_index <= total_iterations:
             try:
@@ -130,7 +131,6 @@ def analyze():
                 licheater.df_index += 1
 
         tos_accounts, closed_accounts, good_accounts = GatherCheater.check_cheaters(licheater.data_list)
-
     return render_template('analysis.html', tos=tos_accounts, closed=closed_accounts, good=good_accounts)
 
 
